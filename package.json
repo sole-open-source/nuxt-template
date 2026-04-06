@@ -10,8 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/eslint": "1.15.2",
+    "@nuxt/image": "2.0.0",
+    "@nuxtjs/color-mode": "4.0.0",
+    "@nuxtjs/eslint-module": "4.1.0",
+    "@nuxtjs/i18n": "10.2.4",
     "nuxt": "^4.4.2",
-    "vue": "^3.5.30",
+    "vue": "^3.5.31",
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
