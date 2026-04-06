@@ -73,3 +73,19 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Code Formatting
+
+Format all files with Prettier:
+
+```bash
+# bun
+bun run format
+```
+
+Check formatting without modifying files:
+
+```bash
+# bun
+bun run format:check
+```

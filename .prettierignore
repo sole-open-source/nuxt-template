@@ -1,0 +1,12 @@
+# Dependencies and build output
+node_modules
+.nuxt
+.output
+dist
+
+# Tooling caches
+.prettier-cache
+
+# Generated artifacts
+*.min.js
+*.min.css
