@@ -655,7 +655,7 @@ const emit = defineEmits<{ action: [] }>()
     <slot name="icon" />
     <div>
       <p class="text-lg font-medium">{{ title }}</p>
-      <p v-if="description" class="text-muted-foreground text-sm">{{ description }}</p>
+      <p v-if="description" class="text-sm text-muted-foreground">{{ description }}</p>
     </div>
     <slot name="action" />
   </div>
