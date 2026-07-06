@@ -5,11 +5,5 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
-    <div class="text-center">
-      <h1 class="text-2xl font-bold">Iniciar sesión</h1>
-      <p class="text-sm text-muted-foreground">Ingresa tus credenciales para continuar</p>
-    </div>
-    <LoginForm />
-  </div>
+  <LoginForm />
 </template>
