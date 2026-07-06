@@ -93,7 +93,11 @@ export function normalizeError(err: unknown): AppError {
     const statusCode = typeof e.statusCode === 'number' ? e.statusCode : e.response?.status
 
     if (typeof statusCode === 'number') {
-      return new ApiError(statusCode, extractMessage(e.data, e.message || 'Ocurrió un error inesperado'), e.data)
+      return new ApiError(
+        statusCode,
+        extractMessage(e.data, e.message || 'Ocurrió un error inesperado'),
+        e.data,
+      )
     }
 
     return new AppError(e.message, 'NETWORK')

@@ -39,7 +39,11 @@ export function toQueryParams<T extends Record<string, unknown>>(params: T): str
       }
     } else {
       const str =
-        value instanceof Date ? value.toISOString() : typeof value === 'object' ? JSON.stringify(value) : String(value)
+        value instanceof Date
+          ? value.toISOString()
+          : typeof value === 'object'
+            ? JSON.stringify(value)
+            : String(value)
       parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(str)}`)
     }
   }

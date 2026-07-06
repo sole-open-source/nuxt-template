@@ -21,8 +21,12 @@ const props = withDefaults(
 
 const emit = defineEmits<{ 'update:modelValue': [value: number] }>()
 
-const isDecrementDisabled = computed(() => typeof props.modelValue !== 'number' ? false : props.modelValue <= props.min)
-const isIncrementDisabled = computed(() => typeof props.modelValue !== 'number' ? false : props.modelValue >= props.max)
+const isDecrementDisabled = computed(() =>
+  typeof props.modelValue !== 'number' ? false : props.modelValue <= props.min,
+)
+const isIncrementDisabled = computed(() =>
+  typeof props.modelValue !== 'number' ? false : props.modelValue >= props.max,
+)
 
 function setValue(value: number) {
   emit('update:modelValue', value)
@@ -45,7 +49,14 @@ function onInputChange(event: Event) {
 
 <template>
   <ButtonGroup>
-    <Button variant="outline" size="icon-sm" type="button" aria-label="Disminuir" :disabled="isDecrementDisabled" @click="decrement">
+    <Button
+      variant="outline"
+      size="icon-sm"
+      type="button"
+      aria-label="Disminuir"
+      :disabled="isDecrementDisabled"
+      @click="decrement"
+    >
       <Minus />
     </Button>
 
@@ -56,11 +67,23 @@ function onInputChange(event: Event) {
       :min="min"
       :max="max"
       :step="step"
-      :class="cn('h-8 w-14 text-center font-mono [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none', props.class)"
+      :class="
+        cn(
+          'h-8 w-14 [appearance:textfield] text-center font-mono [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+          props.class,
+        )
+      "
       @change="onInputChange"
     />
 
-    <Button variant="outline" size="icon-sm" type="button" aria-label="Aumentar" :disabled="isIncrementDisabled" @click="increment">
+    <Button
+      variant="outline"
+      size="icon-sm"
+      type="button"
+      aria-label="Aumentar"
+      :disabled="isIncrementDisabled"
+      @click="increment"
+    >
       <Plus />
     </Button>
   </ButtonGroup>

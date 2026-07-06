@@ -26,7 +26,11 @@ const roleLabel = computed(() => {
             size="lg"
             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
-            <AppAvatar :name="auth.user.value?.name" class="size-8 rounded-lg" fallback-class="rounded-lg" />
+            <AppAvatar
+              :name="auth.user.value?.name"
+              class="size-8 rounded-lg"
+              fallback-class="rounded-lg"
+            />
             <div class="grid flex-1 text-start text-sm leading-tight">
               <span class="truncate font-medium">{{ auth.user.value?.name }}</span>
               <span class="truncate text-xs text-muted-foreground">{{ roleLabel }}</span>
@@ -43,11 +47,15 @@ const roleLabel = computed(() => {
           <DropdownMenuLabel class="p-0 font-normal">
             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
               <Avatar class="size-8 rounded-lg">
-                <AvatarFallback class="rounded-lg">{{ getInitials(auth.user.value?.name) }}</AvatarFallback>
+                <AvatarFallback class="rounded-lg">{{
+                  getInitials(auth.user.value?.name)
+                }}</AvatarFallback>
               </Avatar>
               <div class="grid flex-1 text-start text-sm leading-tight">
                 <span class="truncate font-medium">{{ auth.user.value?.name }}</span>
-                <span class="truncate text-xs text-muted-foreground">{{ auth.user.value?.email }}</span>
+                <span class="truncate text-xs text-muted-foreground">{{
+                  auth.user.value?.email
+                }}</span>
               </div>
             </div>
           </DropdownMenuLabel>

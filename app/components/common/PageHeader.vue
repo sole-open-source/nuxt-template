@@ -10,7 +10,9 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div :class="cn('flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between', props.class)">
+  <div
+    :class="cn('flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between', props.class)"
+  >
     <div class="flex flex-col gap-1">
       <h1 class="text-2xl font-semibold tracking-tight">{{ title }}</h1>
       <p v-if="description" class="text-sm text-muted-foreground">{{ description }}</p>

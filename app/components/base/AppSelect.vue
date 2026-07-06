@@ -24,7 +24,8 @@ const model = computed({
 })
 
 const triggerLabel = computed(
-  () => props.options.find((option) => option.value === props.modelValue)?.label ?? props.placeholder,
+  () =>
+    props.options.find((option) => option.value === props.modelValue)?.label ?? props.placeholder,
 )
 </script>
 

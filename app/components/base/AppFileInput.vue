@@ -63,7 +63,9 @@ function validateFiles(fileList: FileList): { valid: File[]; errors: string[] } 
     if (!isValidFileType(file.type)) {
       errors.push(`El archivo "${file.name}" no es un tipo válido.`)
     } else if (!isValidFileSize(file.size)) {
-      errors.push(`El archivo "${file.name}" supera el tamaño máximo de ${formatFileSize(props.maxSize)}.`)
+      errors.push(
+        `El archivo "${file.name}" supera el tamaño máximo de ${formatFileSize(props.maxSize)}.`,
+      )
     } else {
       valid.push(file)
     }
@@ -133,11 +135,16 @@ function removeFile(index: number) {
       />
       <Upload class="h-10 w-10 text-muted-foreground" />
       <div class="text-center">
-        <p class="text-sm font-medium">Haz clic para seleccionar {{ variant === 'single' ? 'un archivo' : 'archivos' }}.</p>
-        <p class="mt-1 text-xs text-muted-foreground">
-          {{ variant === 'single' ? 'Tamaño máximo: ' : 'Tamaño máximo por archivo: ' }}{{ formatFileSize(maxSize) }}
+        <p class="text-sm font-medium">
+          Haz clic para seleccionar {{ variant === 'single' ? 'un archivo' : 'archivos' }}.
         </p>
-        <p v-if="variant === 'multiple'" class="text-xs text-muted-foreground">Máximo de archivos: {{ maxFiles }}</p>
+        <p class="mt-1 text-xs text-muted-foreground">
+          {{ variant === 'single' ? 'Tamaño máximo: ' : 'Tamaño máximo por archivo: '
+          }}{{ formatFileSize(maxSize) }}
+        </p>
+        <p v-if="variant === 'multiple'" class="text-xs text-muted-foreground">
+          Máximo de archivos: {{ maxFiles }}
+        </p>
       </div>
     </div>
 

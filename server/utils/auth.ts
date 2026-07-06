@@ -25,7 +25,12 @@ function cookieOptions(event: H3Event, maxAge: number, httpOnly: boolean) {
  */
 export function setAuthTokens(event: H3Event, tokens: AuthTokens) {
   const config = useRuntimeConfig(event)
-  setCookie(event, ACCESS_TOKEN_COOKIE, tokens.accessToken, cookieOptions(event, config.authAccessTokenMaxAge, false))
+  setCookie(
+    event,
+    ACCESS_TOKEN_COOKIE,
+    tokens.accessToken,
+    cookieOptions(event, config.authAccessTokenMaxAge, false),
+  )
   setCookie(
     event,
     REFRESH_TOKEN_COOKIE,

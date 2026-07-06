@@ -49,7 +49,9 @@ export function mapExternalUser(external: ExternalUser): User {
     id: String(external.pk),
     email: external.email ?? '',
     name: fullName || external.username,
-    roles: groups.filter((group): group is UserRole => (Object.values(UserRole) as string[]).includes(group)),
+    roles: groups.filter((group): group is UserRole =>
+      (Object.values(UserRole) as string[]).includes(group),
+    ),
     avatarUrl: undefined,
     createdAt: '',
   }
@@ -86,7 +88,8 @@ export async function callAuthApi<T>(
     })
   } catch (error) {
     const appError = normalizeError(error)
-    const statusCode = appError instanceof ApiError && appError.statusCode > 0 ? appError.statusCode : 502
+    const statusCode =
+      appError instanceof ApiError && appError.statusCode > 0 ? appError.statusCode : 502
     throw createError({ statusCode, statusMessage: appError.message, data: appError })
   }
 }

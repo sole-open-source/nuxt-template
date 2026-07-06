@@ -1,4 +1,9 @@
-import { AUTH_ROUTE_PERMISSIONS, DEFAULT_ROUTE, PERMISSION_GROUPS, PUBLIC_ROUTES } from '~/config/domain'
+import {
+  AUTH_ROUTE_PERMISSIONS,
+  DEFAULT_ROUTE,
+  PERMISSION_GROUPS,
+  PUBLIC_ROUTES,
+} from '~/config/domain'
 import type { PermissionGroup } from '~/config/domain'
 import { UserRole } from '~/types/auth/roles'
 import type { User } from '~/types'
@@ -18,7 +23,9 @@ export function isPublicRoute(path: string): boolean {
 
 /** Roles permitidos para `path`, o `null` si la ruta no tiene restricción de rol. */
 function rolesRequiredFor(path: string): readonly UserRole[] | null {
-  const rule = AUTH_ROUTE_PERMISSIONS.find(({ prefix }) => path === prefix || path.startsWith(`${prefix}/`))
+  const rule = AUTH_ROUTE_PERMISSIONS.find(
+    ({ prefix }) => path === prefix || path.startsWith(`${prefix}/`),
+  )
   return rule?.roles ?? null
 }
 

@@ -12,7 +12,9 @@ export function useNavigationFeature() {
   const items = computed((): NavigationItem[] => {
     const user = auth.user
     if (!user) return []
-    return NAVIGATION_ITEMS.filter((item) => !item.permissions || hasAnyPermission(user, item.permissions))
+    return NAVIGATION_ITEMS.filter(
+      (item) => !item.permissions || hasAnyPermission(user, item.permissions),
+    )
   })
 
   const groups = computed((): NavigationGroupView[] => {

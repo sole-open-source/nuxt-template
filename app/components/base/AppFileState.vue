@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { CheckCircle, File as FileIcon, Image as ImageIcon, Loader2, Video as VideoIcon, XCircle } from '@lucide/vue'
+import {
+  CheckCircle,
+  File as FileIcon,
+  Image as ImageIcon,
+  Loader2,
+  Video as VideoIcon,
+  XCircle,
+} from '@lucide/vue'
 
 const props = defineProps<{
   file: File
@@ -28,7 +35,10 @@ const fileType = computed(() => {
 
     <div class="items-top flex h-full min-w-0 flex-1 flex-col">
       <p class="truncate text-sm font-medium">{{ file.name }}</p>
-      <p v-if="!loading" :class="error !== null ? 'text-xs text-destructive' : 'text-xs text-muted-foreground'">
+      <p
+        v-if="!loading"
+        :class="error !== null ? 'text-xs text-destructive' : 'text-xs text-muted-foreground'"
+      >
         {{ error ?? 'Carga completa' }}
       </p>
     </div>

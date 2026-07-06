@@ -36,10 +36,20 @@ function onValueChange(value: DateValue | undefined) {
       <Button
         :disabled="disabled"
         variant="outline"
-        :class="cn('w-full justify-start text-left font-normal', !internalValue && 'text-muted-foreground', props.class)"
+        :class="
+          cn(
+            'w-full justify-start text-left font-normal',
+            !internalValue && 'text-muted-foreground',
+            props.class,
+          )
+        "
       >
         <CalendarIcon class="mr-2 size-4" />
-        {{ internalValue ? df.format(internalValue.toDate(getLocalTimeZone())) : 'Selecciona una fecha' }}
+        {{
+          internalValue
+            ? df.format(internalValue.toDate(getLocalTimeZone()))
+            : 'Selecciona una fecha'
+        }}
       </Button>
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">

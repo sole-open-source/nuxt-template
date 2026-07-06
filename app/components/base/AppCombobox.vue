@@ -27,7 +27,9 @@ const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const open = ref(false)
 
-const selectedLabel = computed(() => props.options.find((option) => option.value === props.modelValue)?.label)
+const selectedLabel = computed(
+  () => props.options.find((option) => option.value === props.modelValue)?.label,
+)
 
 function select(value: string) {
   emit('update:modelValue', value)
@@ -51,7 +53,10 @@ function select(value: string) {
     </PopoverTrigger>
     <PopoverContent class="w-full p-0">
       <Command>
-        <CommandInput class="border-0 ring-0 outline-0 focus:border-0" :placeholder="searchPlaceholder" />
+        <CommandInput
+          class="border-0 ring-0 outline-0 focus:border-0"
+          :placeholder="searchPlaceholder"
+        />
         <CommandList>
           <CommandEmpty>{{ notFoundPlaceholder }}</CommandEmpty>
           <CommandGroup>

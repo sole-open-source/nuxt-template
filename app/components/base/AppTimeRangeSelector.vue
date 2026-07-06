@@ -11,7 +11,9 @@ const props = defineProps<{
 const emit = defineEmits<{ 'update:modelValue': [value: TimeFilter] }>()
 
 const selectOptions = computed(() => {
-  const values = props.options.includes(props.modelValue) ? props.options : [props.modelValue, ...props.options]
+  const values = props.options.includes(props.modelValue)
+    ? props.options
+    : [props.modelValue, ...props.options]
   return values.map((option) => ({ label: timeFilterLabel(option), value: option }))
 })
 
@@ -21,7 +23,12 @@ function onUpdate(value: string) {
 </script>
 
 <template>
-  <AppSelect :model-value="modelValue" :options="selectOptions" :disabled="disabled" @update:model-value="onUpdate">
+  <AppSelect
+    :model-value="modelValue"
+    :options="selectOptions"
+    :disabled="disabled"
+    @update:model-value="onUpdate"
+  >
     <template #default="{ label }">
       <div class="flex w-full items-center gap-2">
         <CalendarIcon class="size-4" />

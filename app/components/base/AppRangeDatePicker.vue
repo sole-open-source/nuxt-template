@@ -24,7 +24,12 @@ const internalValue = computed({
   <div class="grid gap-2">
     <Popover>
       <PopoverTrigger
-        :class="cn(buttonVariants({ variant: 'outline' }), !modelValue?.start && 'max-w-max text-muted-foreground')"
+        :class="
+          cn(
+            buttonVariants({ variant: 'outline' }),
+            !modelValue?.start && 'max-w-max text-muted-foreground',
+          )
+        "
       >
         <CalendarIcon class="mr-2 size-4" />
         <template v-if="modelValue?.start">
