@@ -77,6 +77,8 @@ export default defineNuxtConfig({
     authRefreshEndpoint: process.env.AUTH_REFRESH_ENDPOINT ?? '/auth/token/refresh/',
     public: {
       apiBase: withProtocol(process.env.API_BASE_URL ?? ''),
+      authGoogleEnabled: process.env.AUTH_GOOGLE_ENABLED === 'true',
+      googleClientId: process.env.GOOGLE_CLIENT_ID ?? '',
     },
   },
 })
