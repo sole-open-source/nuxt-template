@@ -10,6 +10,6 @@ definePageMeta({
       <h1 class="text-2xl font-bold">Crear cuenta</h1>
       <p class="text-sm text-muted-foreground">Completa el formulario para registrarte</p>
     </div>
-    <!-- RegisterForm goes here: components/domain/auth/RegisterForm.vue -->
+    <RegisterForm />
   </div>
 </template>

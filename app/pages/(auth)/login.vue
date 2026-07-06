@@ -10,6 +10,6 @@ definePageMeta({
       <h1 class="text-2xl font-bold">Iniciar sesión</h1>
       <p class="text-sm text-muted-foreground">Ingresa tus credenciales para continuar</p>
     </div>
-    <!-- LoginForm goes here: components/domain/auth/LoginForm.vue -->
+    <LoginForm />
   </div>
 </template>
