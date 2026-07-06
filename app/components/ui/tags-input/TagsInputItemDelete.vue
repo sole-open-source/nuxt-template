@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { TagsInputItemDeleteProps } from 'reka-ui'
-
 import type { HTMLAttributes } from 'vue'
-import { XIcon } from '@lucide/vue'
+import { X } from '@lucide/vue'
 import { reactiveOmit } from '@vueuse/core'
 import { TagsInputItemDelete, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
@@ -20,7 +19,7 @@ const forwardedProps = useForwardProps(delegatedProps)
     :class="cn('mr-1 flex rounded bg-transparent', props.class)"
   >
     <slot>
-      <XIcon class="h-4 w-4" />
+      <X class="h-4 w-4" />
     </slot>
   </TagsInputItemDelete>
 </template>

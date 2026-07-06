@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { NumberFieldIncrementProps } from 'reka-ui'
-
 import type { HTMLAttributes } from 'vue'
-import { PlusIcon } from '@lucide/vue'
+import { Plus } from '@lucide/vue'
 import { reactiveOmit } from '@vueuse/core'
 import { NumberFieldIncrement, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
@@ -26,7 +25,7 @@ const forwarded = useForwardProps(delegatedProps)
     "
   >
     <slot>
-      <PlusIcon class="h-4 w-4" />
+      <Plus class="h-4 w-4" />
     </slot>
   </NumberFieldIncrement>
 </template>

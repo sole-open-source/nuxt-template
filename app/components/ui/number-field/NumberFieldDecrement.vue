@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { NumberFieldDecrementProps } from 'reka-ui'
-
 import type { HTMLAttributes } from 'vue'
-import { MinusIcon } from '@lucide/vue'
+import { Minus } from '@lucide/vue'
 import { reactiveOmit } from '@vueuse/core'
 import { NumberFieldDecrement, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
@@ -26,7 +25,7 @@ const forwarded = useForwardProps(delegatedProps)
     "
   >
     <slot>
-      <MinusIcon class="h-4 w-4" />
+      <Minus class="h-4 w-4" />
     </slot>
   </NumberFieldDecrement>
 </template>

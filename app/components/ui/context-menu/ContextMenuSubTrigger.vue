@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { ContextMenuSubTriggerProps } from 'reka-ui'
-
 import type { HTMLAttributes } from 'vue'
-import { ChevronRightIcon } from '@lucide/vue'
+import { ChevronRight } from '@lucide/vue'
 import { reactiveOmit } from '@vueuse/core'
 import { ContextMenuSubTrigger, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
@@ -21,14 +20,12 @@ const forwardedProps = useForwardProps(delegatedProps)
     data-slot="context-menu-sub-trigger"
     :data-inset="inset ? '' : undefined"
     v-bind="forwardedProps"
-    :class="
-      cn(
-        'focus:bg-accent focus:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none data-inset:pl-7 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',
-        props.class,
-      )
-    "
+    :class="cn(
+      'flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[inset]:pl-8 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4',
+      props.class,
+    )"
   >
     <slot />
-    <ChevronRightIcon class="cn-rtl-flip ml-auto" />
+    <ChevronRight class="ml-auto" />
   </ContextMenuSubTrigger>
 </template>

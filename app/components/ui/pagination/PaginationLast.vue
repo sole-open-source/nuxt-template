@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import type { PaginationLastProps } from 'reka-ui'
-
 import type { HTMLAttributes } from 'vue'
 import type { ButtonVariants } from '@/components/ui/button'
-import { ChevronsRightIcon } from '@lucide/vue'
+import { ChevronRightIcon } from '@lucide/vue'
 import { reactiveOmit } from '@vueuse/core'
 import { PaginationLast, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
@@ -28,12 +27,12 @@ const forwarded = useForwardProps(delegatedProps)
 <template>
   <PaginationLast
     data-slot="pagination-last"
-    :class="cn(buttonVariants({ variant: 'ghost', size }), '', props.class)"
+    :class="cn(buttonVariants({ variant: 'ghost', size }), 'gap-1 px-2.5 sm:pr-2.5', props.class)"
     v-bind="forwarded"
   >
     <slot>
       <span class="hidden sm:block">Last</span>
-      <ChevronsRightIcon data-icon="inline-end" />
+      <ChevronRightIcon />
     </slot>
   </PaginationLast>
 </template>

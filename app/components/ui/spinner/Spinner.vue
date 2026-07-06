@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-
 import { Loader2Icon } from '@lucide/vue'
 import { cn } from '@/lib/utils'
 

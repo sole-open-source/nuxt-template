@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { PaginationPrevProps } from 'reka-ui'
-
 import type { HTMLAttributes } from 'vue'
 import type { ButtonVariants } from '@/components/ui/button'
 import { ChevronLeftIcon } from '@lucide/vue'
@@ -28,11 +27,11 @@ const forwarded = useForwardProps(delegatedProps)
 <template>
   <PaginationPrev
     data-slot="pagination-previous"
-    :class="cn(buttonVariants({ variant: 'ghost', size }), 'pl-1.5!', props.class)"
+    :class="cn(buttonVariants({ variant: 'ghost', size }), 'gap-1 px-2.5 sm:pr-2.5', props.class)"
     v-bind="forwarded"
   >
     <slot>
-      <ChevronLeftIcon data-icon="inline-start" class="cn-rtl-flip" />
+      <ChevronLeftIcon />
       <span class="hidden sm:block">Previous</span>
     </slot>
   </PaginationPrev>

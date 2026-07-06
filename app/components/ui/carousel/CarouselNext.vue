@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { WithClassAsProps } from './interface'
-
 import type { ButtonVariants } from '@/components/ui/button'
-import { ChevronRightIcon } from '@lucide/vue'
+import { ArrowRight } from '@lucide/vue'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useCarousel } from './useCarousel'
@@ -16,7 +15,7 @@ const props = withDefaults(
   >(),
   {
     variant: 'outline',
-    size: 'icon-sm',
+    size: 'icon',
   },
 )
 
@@ -29,7 +28,7 @@ const { orientation, canScrollNext, scrollNext } = useCarousel()
     :disabled="!canScrollNext"
     :class="
       cn(
-        'absolute touch-manipulation rounded-full',
+        'absolute size-8 rounded-full',
         orientation === 'horizontal'
           ? 'top-1/2 -right-12 -translate-y-1/2'
           : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
@@ -41,8 +40,8 @@ const { orientation, canScrollNext, scrollNext } = useCarousel()
     @click="scrollNext"
   >
     <slot>
-      <ChevronRightIcon class="cn-rtl-flip" />
-      <span class="sr-only">Next slide</span>
+      <ArrowRight />
+      <span class="sr-only">Next Slide</span>
     </slot>
   </Button>
 </template>
