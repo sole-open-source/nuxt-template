@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const auth = useAuthStore()
+const auth = useAuthFeature()
 </script>
 
 <template>
@@ -12,8 +12,9 @@ const auth = useAuthStore()
             Dashboard
           </NuxtLink>
         </nav>
-        <div class="text-xs text-muted-foreground">
-          {{ auth.user?.email }}
+        <div class="flex items-center justify-between gap-2">
+          <span class="truncate text-xs text-muted-foreground">{{ auth.user.value?.email }}</span>
+          <Button variant="ghost" size="sm" @click="auth.logout">Salir</Button>
         </div>
       </div>
     </aside>
