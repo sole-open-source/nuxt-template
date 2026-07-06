@@ -18,6 +18,12 @@ export interface RegisterPayload {
   confirmPassword: string
 }
 
+export interface ChangePasswordPayload {
+  old_password: string
+  new_password: string
+  new_password_confirm: string
+}
+
 /**
  * La sesión vive en cookies gestionadas por server/api/auth/* (BFF): el
  * access_token es legible por el cliente para llamadas directas a la API
@@ -73,6 +79,13 @@ export const useAuthStore = defineStore('auth', {
         })
         this.user = user
         this.status = 'authenticated'
+      })
+    },
+
+    /** Sin UI propia todavía — expuesto para paridad de superficie con el AuthService del template. */
+    async changePassword(payload: ChangePasswordPayload) {
+      await withLoading(this, async () => {
+        await $fetch('/api/auth/change-password', { method: 'POST', body: payload })
       })
     },
 

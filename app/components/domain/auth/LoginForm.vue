@@ -63,7 +63,12 @@ const onSubmit = handleSubmit((values) => feature.login(values))
               <Button type="submit" :disabled="isSubmitting">
                 {{ isSubmitting ? 'Ingresando...' : 'Iniciar sesión' }}
               </Button>
-              <Button variant="outline" type="button" disabled title="Próximamente">
+              <Button
+                v-if="feature.googleEnabled.value"
+                variant="outline"
+                type="button"
+                @click="feature.redirectToGoogle"
+              >
                 Iniciar sesión con Google
               </Button>
               <FieldError v-if="feature.error.value" :errors="[feature.error.value]" />
