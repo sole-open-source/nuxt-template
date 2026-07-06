@@ -7,3 +7,9 @@ export const PERMISSION_GROUPS = {
 } as const
 
 export type PermissionGroup = keyof typeof PERMISSION_GROUPS
+
+export const ROLE_LABELS: Record<UserRole, string> = {
+  [UserRole.ADMIN]: 'Administrador',
+  [UserRole.EDITOR]: 'Editor',
+  [UserRole.VIEWER]: 'Visor',
+}
