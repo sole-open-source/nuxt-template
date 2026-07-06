@@ -1,7 +1,7 @@
 import { UserRole } from '~/types/auth/roles'
 
 /** Rutas accesibles sin sesión. Prefijo-match (incluye subrutas). */
-export const PUBLIC_ROUTES = ['/login', '/register'] as const
+export const PUBLIC_ROUTES = ['/login', '/register', '/authorize'] as const
 
 /**
  * Mapa ruta (prefijo) → roles permitidos, evaluado en orden de aparición.
