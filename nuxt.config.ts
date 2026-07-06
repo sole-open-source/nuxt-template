@@ -38,6 +38,7 @@ export default defineNuxtConfig({
   // pirámide de componentes de la arquitectura, así que se desactiva el
   // prefijo para cada carpeta de la pirámide (ui/ ya lo maneja shadcn-nuxt).
   components: [
+    { path: '~/components/base', pathPrefix: false },
     { path: '~/components/common', pathPrefix: false },
     { path: '~/components/patterns', pathPrefix: false },
     { path: '~/components/domain', pathPrefix: false },
