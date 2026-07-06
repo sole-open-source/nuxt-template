@@ -10,3 +10,5 @@ dist
 # Generated artifacts
 *.min.js
 *.min.css
+
+app/components/ui
