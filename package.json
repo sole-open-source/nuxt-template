@@ -9,7 +9,13 @@
     "format:check": "prettier . --cache --check",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,vue,js,mjs,cjs,json,css,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@internationalized/date": "^3.12.2",
@@ -44,6 +50,8 @@
     "@tailwindcss/vite": "^4.3.2",
     "@types/node": "^26.1.0",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
     "prettier": "^3.9.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.3.2",
