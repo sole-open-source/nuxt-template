@@ -65,6 +65,17 @@ export const useAuthStore = defineStore('auth', {
       })
     },
 
+    async loginWithGoogle(code: string) {
+      await withLoading(this, async () => {
+        const { user } = await $fetch<{ user: User }>('/api/auth/google', {
+          method: 'POST',
+          body: { code },
+        })
+        this.user = user
+        this.status = 'authenticated'
+      })
+    },
+
     async logout() {
       try {
         await $fetch('/api/auth/logout', { method: 'POST' })
