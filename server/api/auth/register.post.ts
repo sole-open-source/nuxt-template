@@ -3,10 +3,9 @@ import { ValidationError } from '~/lib/helpers/error'
 
 const RegisterSchema = z
   .object({
-    name: z.string().min(1).max(100),
-    email: z.string().email(),
-    password: z.string().min(8).max(128),
-    confirmPassword: z.string().min(1),
+    username: z.string().min(1, 'El usuario o correo es obligatorio.').max(150),
+    password: z.string().min(8, 'Debe tener al menos 8 caracteres.').max(128),
+    confirmPassword: z.string().min(1, 'Confirma tu contraseña.'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Las contraseñas no coinciden.',
@@ -25,17 +24,21 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { name, email, password } = parsed.data
+  const { username, password, confirmPassword } = parsed.data
 
-  const response = await callExternalApi<ExternalSignInResponse>(event, '/auth/register', {
+  const auth = await callAuthApi<AuthResponse>(event, '/auth/registration/', {
     method: 'POST',
-    body: { name, email, password },
+    body: {
+      username,
+      email: looksLikeEmail(username) ? username : undefined,
+      password1: password,
+      password2: confirmPassword,
+    },
   })
 
-  setAuthTokens(event, {
-    accessToken: response.tokens.access_token,
-    refreshToken: response.tokens.refresh_token,
-  })
+  const tokens = extractAuthTokens(auth)
+  setAuthTokens(event, tokens)
+  const user = await fetchAuthUser(event, tokens.accessToken)
 
-  return { user: mapExternalUser(response.user) }
+  return { user }
 })

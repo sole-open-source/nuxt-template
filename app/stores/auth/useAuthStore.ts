@@ -6,13 +6,14 @@ import type { User } from '~/types'
 type AuthStatus = 'idle' | 'loading' | 'authenticated' | 'unauthenticated'
 
 export interface LoginCredentials {
-  email: string
+  /** Usuario o correo — el backend de auth acepta ambos bajo este campo. */
+  username: string
   password: string
 }
 
 export interface RegisterPayload {
-  name: string
-  email: string
+  /** Usuario o correo — se usa como username; si parece un correo, también se envía como email. */
+  username: string
   password: string
   confirmPassword: string
 }

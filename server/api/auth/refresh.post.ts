@@ -8,17 +8,16 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)
 
   try {
-    const response = await callExternalApi<ExternalSignInResponse>(event, config.authRefreshEndpoint, {
+    const auth = await callAuthApi<AuthResponse>(event, config.authRefreshEndpoint, {
       method: 'POST',
-      body: { refresh_token: refreshToken },
+      body: { refresh: refreshToken },
     })
 
-    setAuthTokens(event, {
-      accessToken: response.tokens.access_token,
-      refreshToken: response.tokens.refresh_token,
-    })
+    const tokens = extractAuthTokens(auth, refreshToken)
+    setAuthTokens(event, tokens)
+    const user = await fetchAuthUser(event, tokens.accessToken)
 
-    return { user: mapExternalUser(response.user) }
+    return { user }
   } catch (error) {
     // El backend puede no soportar refresh todavía (404) o el refresh token
     // puede ser inválido/expirado (401): en ambos casos degradamos a forzar

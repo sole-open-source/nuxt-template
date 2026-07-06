@@ -2,8 +2,8 @@ import { z } from 'zod'
 import { ValidationError } from '~/lib/helpers/error'
 
 const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
+  username: z.string().min(1, 'Ingresa tu usuario o correo.'),
+  password: z.string().min(1, 'La contraseña es obligatoria.'),
 })
 
 export default defineEventHandler(async (event) => {
@@ -18,15 +18,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const response = await callExternalApi<ExternalSignInResponse>(event, '/auth/login', {
+  const auth = await callAuthApi<AuthResponse>(event, '/auth/login/', {
     method: 'POST',
     body: parsed.data,
   })
 
-  setAuthTokens(event, {
-    accessToken: response.tokens.access_token,
-    refreshToken: response.tokens.refresh_token,
-  })
+  const tokens = extractAuthTokens(auth)
+  setAuthTokens(event, tokens)
+  const user = await fetchAuthUser(event, tokens.accessToken)
 
-  return { user: mapExternalUser(response.user) }
+  return { user }
 })
