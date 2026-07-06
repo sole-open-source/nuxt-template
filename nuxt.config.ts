@@ -37,6 +37,12 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    authCookieDomain: process.env.AUTH_COOKIE_DOMAIN ?? '',
+    authCookieSecure: process.env.AUTH_COOKIE_SECURE !== 'false',
+    authCookieSameSite: (process.env.AUTH_COOKIE_SAMESITE as 'lax' | 'strict' | 'none') ?? 'lax',
+    authAccessTokenMaxAge: Number(process.env.AUTH_ACCESS_TOKEN_MAX_AGE ?? 60 * 15),
+    authRefreshTokenMaxAge: Number(process.env.AUTH_REFRESH_TOKEN_MAX_AGE ?? 60 * 60 * 24 * 7),
+    authRefreshEndpoint: process.env.AUTH_REFRESH_ENDPOINT ?? '/auth/refresh',
     public: {
       apiBase: process.env.API_BASE_URL ?? '',
     },
