@@ -6,10 +6,9 @@ export function createApiClient(baseURL: string, getToken: () => string | null) 
     onRequest({ options }) {
       const token = getToken()
       if (token) {
-        options.headers = {
-          ...options.headers,
-          Authorization: `Bearer ${token}`,
-        }
+        const headers = new Headers(options.headers)
+        headers.set('Authorization', `Bearer ${token}`)
+        options.headers = headers
       }
     },
   })
