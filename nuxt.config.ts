@@ -17,6 +17,14 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/tailwind.css'],
 
+  // Los auto-imports de Nuxt por defecto solo escanean el nivel superior de
+  // composables/ y stores/ (no subcarpetas). Este proyecto organiza ambos
+  // por dominio (composables/features/[domain]/, stores/[domain]/), así que
+  // se necesitan patrones recursivos explícitos para que se auto-importen.
+  imports: {
+    dirs: ['composables/**', 'stores/**'],
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },
