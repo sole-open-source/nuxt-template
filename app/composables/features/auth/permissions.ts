@@ -8,6 +8,10 @@ export function hasPermission(user: User, group: PermissionGroup): boolean {
   return PERMISSION_GROUPS[group].some((role) => user.roles.includes(role))
 }
 
+export function hasAnyPermission(user: User, groups: readonly PermissionGroup[]): boolean {
+  return groups.some((group) => hasPermission(user, group))
+}
+
 export function isPublicRoute(path: string): boolean {
   return PUBLIC_ROUTES.some((route) => path === route || path.startsWith(`${route}/`))
 }
