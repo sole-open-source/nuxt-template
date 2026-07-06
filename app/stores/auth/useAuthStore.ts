@@ -1,20 +1,36 @@
 import { defineStore } from 'pinia'
 import { withLoading } from '~/lib/helpers/loading'
-import type { User, Session } from '~/types'
+import { ACCESS_TOKEN_COOKIE } from '#shared/utils/auth-cookies'
+import type { User } from '~/types'
 
 type AuthStatus = 'idle' | 'loading' | 'authenticated' | 'unauthenticated'
 
-const TOKEN_COOKIE = 'auth-token'
+export interface LoginCredentials {
+  email: string
+  password: string
+}
 
+export interface RegisterPayload {
+  name: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+
+/**
+ * La sesión vive en cookies gestionadas por server/api/auth/* (BFF): el
+ * access_token es legible por el cliente para llamadas directas a la API
+ * externa, el refresh_token es httpOnly. Este store solo refleja el estado
+ * derivado (usuario + status), nunca guarda los tokens en memoria.
+ */
 export const useAuthStore = defineStore('auth', {
   state: () => {
-    const tokenCookie = useCookie<string | null>(TOKEN_COOKIE)
+    // El access_token es legible por el cliente: si no existe, ni siquiera
+    // vale la pena hacer el round-trip a /api/auth/me al arrancar.
+    const hasAccessToken = !!useCookie(ACCESS_TOKEN_COOKIE).value
     return {
       user: null as User | null,
-      token: tokenCookie.value ?? null,
-      // If we have a persisted token, start as idle (needs verification).
-      // If not, we're unauthenticated right away.
-      status: (tokenCookie.value ? 'idle' : 'unauthenticated') as AuthStatus,
+      status: (hasAccessToken ? 'idle' : 'unauthenticated') as AuthStatus,
       loading: false,
       error: null as string | null,
     }
@@ -26,57 +42,68 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    async login(credentials: { email: string; password: string }) {
-      const { $api } = useNuxtApp()
+    async login(credentials: LoginCredentials) {
       await withLoading(this, async () => {
-        const session = await $api<Session>('/auth/login', {
+        const { user } = await $fetch<{ user: User }>('/api/auth/login', {
           method: 'POST',
           body: credentials,
         })
-        this._setToken(session.token)
-        this.user = session.user
+        this.user = user
+        this.status = 'authenticated'
+      })
+    },
+
+    async register(payload: RegisterPayload) {
+      await withLoading(this, async () => {
+        const { user } = await $fetch<{ user: User }>('/api/auth/register', {
+          method: 'POST',
+          body: payload,
+        })
+        this.user = user
         this.status = 'authenticated'
       })
     },
 
     async logout() {
-      const { $api } = useNuxtApp()
       try {
-        await $api('/auth/logout', { method: 'POST' })
+        await $fetch('/api/auth/logout', { method: 'POST' })
       } finally {
         this.resetState()
         await navigateTo('/login')
       }
     },
 
+    /** Revalida la sesión contra el servidor (usada por el middleware global). */
     async fetchCurrentUser() {
-      const { $api } = useNuxtApp()
       this.status = 'loading'
       try {
-        await withLoading(this, async () => {
-          this.user = await $api<User>('/auth/me')
-          this.status = 'authenticated'
-        })
+        this.user = await $fetch<User>('/api/auth/me')
+        this.status = 'authenticated'
       } catch {
-        this.status = 'unauthenticated'
+        const refreshed = await this.tryRefresh()
+        if (!refreshed) {
+          this.user = null
+          this.status = 'unauthenticated'
+        }
       }
     },
 
-    _setToken(token: string) {
-      const cookie = useCookie<string | null>(TOKEN_COOKIE, {
-        maxAge: 60 * 60 * 24 * 7,
-        secure: true,
-        sameSite: 'lax',
-      })
-      cookie.value = token
-      this.token = token
+    /** Intenta renovar la sesión vía refresh token. Nunca lanza. */
+    async tryRefresh(): Promise<boolean> {
+      try {
+        const { user } = await $fetch<{ user: User }>('/api/auth/refresh', { method: 'POST' })
+        this.user = user
+        this.status = 'authenticated'
+        return true
+      } catch {
+        this.user = null
+        this.status = 'unauthenticated'
+        return false
+      }
     },
 
     resetState() {
-      const cookie = useCookie<string | null>(TOKEN_COOKIE)
-      cookie.value = null
       this.user = null
-      this.token = null
       this.status = 'unauthenticated'
       this.loading = false
       this.error = null
