@@ -14,3 +14,6 @@ example
 # Generated artifacts
 *.min.js
 *.min.css
+
+# shadcn-vue components (formatted by the shadcn-vue CLI itself)
+app/components/ui
