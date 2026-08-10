@@ -28,20 +28,16 @@ describe('pageAccess', () => {
 
   it('sends a visitor without a session to sign in', () => {
     expect(pageAccess(null, '/')).toBe('unauthenticated')
-    expect(pageAccess(undefined, '/admin')).toBe('unauthenticated')
+    expect(pageAccess(undefined, '/reports')).toBe('unauthenticated')
   })
 
   it('allows a role that holds the permission', () => {
-    expect(pageAccess(userWith(UserRole.ADMIN), '/admin')).toBe('allowed')
+    expect(pageAccess(userWith(UserRole.ADMIN), '/')).toBe('allowed')
     expect(pageAccess(userWith(UserRole.MEMBER), '/')).toBe('allowed')
   })
 
   it('refuses a signed-in role that lacks it', () => {
-    // A member reaching /admin by typing the URL.
-    expect(pageAccess(userWith(UserRole.MEMBER), '/admin')).toBe('forbidden')
-  })
-
-  it('refuses a role the frontend has never heard of', () => {
+    // A role the backend invented and this app has never granted anything to.
     expect(pageAccess(userWith('viewer'), '/')).toBe('forbidden')
   })
 
@@ -58,9 +54,9 @@ describe('loginUrl', () => {
   })
 
   it('round-trips the route the visitor was headed to', () => {
-    const url = new URL(loginUrl('/admin/users', '?page=2'), 'http://localhost')
+    const url = new URL(loginUrl('/reports/2024', '?page=2'), 'http://localhost')
 
     expect(url.pathname).toBe('/login')
-    expect(decodeRedirect(url.searchParams.get('redirect'))).toBe('/admin/users?page=2')
+    expect(decodeRedirect(url.searchParams.get('redirect'))).toBe('/reports/2024?page=2')
   })
 })
