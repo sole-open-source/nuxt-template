@@ -32,12 +32,12 @@ vi.stubGlobal('sendRedirect', (_event: unknown, location: string) => ({
   location,
 }))
 
-function userWith(role: UserRole): User {
+function userWith(role: string): User {
   return {
     id: '1',
     email: 'test@example.com',
     name: 'Test',
-    role,
+    role: role as UserRole,
     avatar: null,
     created_at: '2024-01-01T00:00:00.000Z',
     updated_at: '2024-01-01T00:00:00.000Z',
@@ -92,7 +92,7 @@ describe('auth middleware', () => {
   })
 
   it('keeps the route it was headed to in the redirect', async () => {
-    const { outcome } = await callAuth('/admin')
+    const { outcome } = await callAuth('/reports')
 
     expect(outcome).toMatchObject({ kind: 'redirect' })
     expect((outcome as { location: string }).location).toMatch(/^\/login\?redirect=/)
@@ -100,7 +100,7 @@ describe('auth middleware', () => {
 
   it('answers an endpoint request without a session with 401 instead of redirecting', async () => {
     // A fetch() follows a 302 in silence and then fails parsing login HTML.
-    const { outcome } = await callAuth('/api/users')
+    const { outcome } = await callAuth('/api/reports')
 
     expect(outcome).toEqual({ kind: 'error', status: 401 })
   })
@@ -117,11 +117,14 @@ describe('auth middleware', () => {
 
   it('installs a guard bound to the resolved user', async () => {
     fetchMe.mockResolvedValue(userWith(UserRole.MEMBER))
+    const granted = await callAuth('/', SESSION)
+    expect(() => granted.context.requirePermission('dashboard:read')).not.toThrow()
 
-    const { context } = await callAuth('/', SESSION)
-
-    expect(() => context.requirePermission('users:delete')).toThrow()
-    expect(() => context.requirePermission('dashboard:read')).not.toThrow()
+    // Same request, a role this app grants nothing to: the guard follows the
+    // user it was bound to, not the route.
+    fetchMe.mockResolvedValue(userWith('viewer'))
+    const refused = await callAuth('/', SESSION)
+    expect(() => refused.context.requirePermission('dashboard:read')).toThrow()
   })
 
   it('ends the session when the backend rejects the token', async () => {
@@ -156,23 +159,23 @@ describe('auth middleware', () => {
 
 describe('auth middleware on endpoints', () => {
   it('does not apply the page table to /api', async () => {
-    // /api/users is absent from AUTH_ROUTE_PERMISSIONS by design: the handler
+    // /api/reports is absent from AUTH_ROUTE_PERMISSIONS by design: the handler
     // authorizes itself, per method.
     fetchMe.mockResolvedValue(userWith(UserRole.ADMIN))
 
-    const { outcome } = await callAuth('/api/users', SESSION)
+    const { outcome } = await callAuth('/api/reports', SESSION)
 
     expect(outcome).toEqual({ kind: 'resolved' })
   })
 
   it('leaves the decision to the handler, which gets a guard bound to the user', async () => {
-    fetchMe.mockResolvedValue(userWith(UserRole.MEMBER))
+    fetchMe.mockResolvedValue(userWith('viewer'))
 
-    const { outcome, context } = await callAuth('/api/users', SESSION)
+    const { outcome, context } = await callAuth('/api/reports', SESSION)
 
     // The middleware passes it through...
     expect(outcome).toEqual({ kind: 'resolved' })
-    // ...and the handler's own call is what refuses a member.
-    expect(() => context.requirePermission('users:delete')).toThrow()
+    // ...and the handler's own call is what refuses.
+    expect(() => context.requirePermission('dashboard:read')).toThrow()
   })
 })

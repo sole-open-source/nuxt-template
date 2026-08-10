@@ -15,8 +15,7 @@
  * - **Endpoints** are not. Each handler calls `event.context.requirePermission`
  *   itself and this middleware does not second-guess it, so who may open a
  *   screen and who may call the endpoint behind it stay separate decisions —
- *   and one path can still ask for `users:read` on GET and `users:delete` on
- *   DELETE.
+ *   and one path can still ask for one permission on GET and another on DELETE.
  *
  * What they share is the answer to "who holds this permission"
  * (`ROLE_PERMISSIONS`) and the object that enforces it (`server/utils/guard.ts`).

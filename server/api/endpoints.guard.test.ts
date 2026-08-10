@@ -13,7 +13,8 @@ import { describe, expect, it } from 'vitest'
  * any signed-in user, and nothing in lint, types or the middleware can notice.
  *
  * So the check lives here: every endpoint under `/api` must refuse a request
- * whose guard refuses. Adding an unguarded handler turns this red.
+ * whose guard refuses. The first one you add is covered the moment you add it,
+ * and an unguarded one turns this red.
  *
  * `auth/` is excluded, and it is the one exclusion allowed: those routes are how
  * a visitor gets a session in the first place, so requiring one would close the
@@ -21,14 +22,13 @@ import { describe, expect, it } from 'vitest'
  * same reason.
  */
 
-const endpoints = import.meta.glob('./**/*.ts', { eager: true }) as Record<
+const modules = import.meta.glob('./**/*.ts', { eager: true }) as Record<
   string,
   { default?: unknown }
 >
 
-const guarded = Object.entries(endpoints).filter(
-  ([path]) => !path.startsWith('./auth/') && !path.endsWith('.test.ts'),
-)
+const found = Object.entries(modules).filter(([path]) => !path.endsWith('.test.ts'))
+const guarded = found.filter(([path]) => !path.startsWith('./auth/'))
 
 /** Stands in for a user the guard rejects — every permission check throws 403. */
 function deniedEvent(): H3Event {
@@ -43,8 +43,9 @@ function deniedEvent(): H3Event {
 
 describe('every /api endpoint guards itself', () => {
   it('finds the endpoint modules at all', () => {
-    // Guards the guard: a broken glob would make every case below vacuous.
-    expect(guarded.length).toBeGreaterThan(0)
+    // Guards the guard: a broken glob would make every case below vacuous, and
+    // would do it silently while the app still ships endpoints.
+    expect(found.length).toBeGreaterThan(0)
   })
 
   it.each(guarded)('%s refuses when the guard refuses', async (_path, module) => {

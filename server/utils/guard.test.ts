@@ -33,29 +33,20 @@ function statusFor(user: User | null, permission: Permission): number | null {
 
 describe('createPermissionGuard', () => {
   it('lets a role holding the permission through', () => {
-    expect(statusFor(userWith(UserRole.ADMIN), 'users:delete')).toBeNull()
+    // There is no "unrestricted" permission: these roles reach the dashboard
+    // because the grant is written down, not by falling through.
+    expect(statusFor(userWith(UserRole.ADMIN), 'dashboard:read')).toBeNull()
+    expect(statusFor(userWith(UserRole.MEMBER), 'dashboard:read')).toBeNull()
   })
 
   it('denies a signed-in role that does not hold it with 403', () => {
-    expect(statusFor(userWith(UserRole.MEMBER), 'users:delete')).toBe(403)
-  })
-
-  it('denies a role the frontend has never heard of', () => {
-    // A restrictive role added to the backend must not widen access here.
-    expect(statusFor(userWith('viewer'), 'users:delete')).toBe(403)
+    // A restrictive role added to the backend must not widen access here: it
+    // arrives with an empty grant list and is refused without a special case.
     expect(statusFor(userWith('viewer'), 'dashboard:read')).toBe(403)
   })
 
   it('answers 401, not 403, without a session', () => {
     // The caller can tell "sign in again" from "this is not for you".
-    expect(statusFor(null, 'users:delete')).toBe(401)
     expect(statusFor(null, 'dashboard:read')).toBe(401)
-  })
-
-  it('lets a lesser role through what it was granted', () => {
-    // There is no "unrestricted" permission: a member reaches the dashboard
-    // because the grant is written down, not by falling through.
-    expect(statusFor(userWith(UserRole.MEMBER), 'dashboard:read')).toBeNull()
-    expect(statusFor(userWith('viewer'), 'dashboard:read')).toBe(403)
   })
 })
