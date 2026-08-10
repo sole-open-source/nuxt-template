@@ -1,10 +1,13 @@
 import type { Component } from 'vue'
 import type { Permission } from '~/config/permissions'
-import { HouseIcon, ShieldIcon } from '@lucide/vue'
+import { HouseIcon } from '@lucide/vue'
 
+/**
+ * The buckets the sidebar renders, in this order. A group with no visible items
+ * is not rendered, so adding one costs an entry here and a label below.
+ */
 export enum NavigationGroup {
   Main = 'main',
-  Admin = 'admin',
 }
 
 export interface NavigationItem {
@@ -31,16 +34,8 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     group: NavigationGroup.Main,
     requiredPermission: 'dashboard:read',
   },
-  {
-    title: 'Admin',
-    icon: ShieldIcon,
-    to: '/admin',
-    group: NavigationGroup.Admin,
-    requiredPermission: 'users:read',
-  },
 ]
 
 export const NAVIGATION_GROUP_LABELS: Record<NavigationGroup, string> = {
   [NavigationGroup.Main]: 'Main',
-  [NavigationGroup.Admin]: 'Administration',
 }
