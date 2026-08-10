@@ -15,8 +15,10 @@ example
 *.min.js
 *.min.css
 
-# shadcn-vue components (formatted by the shadcn-vue CLI itself)
+# Vendored UI — shadcn-vue regenerates the first, Gandalf syncs the second
 app/components/ui
+app/components/gandalf
+
 # Agent tooling — written by the tools, not by us
 .claude
 .agents

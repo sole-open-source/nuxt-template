@@ -35,9 +35,22 @@ de inventar uno nuevo.
 ## UI / Estilos
 
 - **Tailwind siempre.** CSS custom solo si es estrictamente imposible con utilidades de Tailwind.
-- **shadcn primero:** si existe un componente de shadcn aplicable (`Button`, `Input`, `Dialog`,
-  `Select`, etc.), úsalo en su forma pura: sin modificarlo ni agregarle clases extra salvo
-  necesidad estricta.
+- **Si `app/components/gandalf/` no tiene componentes, Gandalf no está en este proyecto y todo lo
+  que sigue sobre él no aplica — no es un bug ni algo pendiente de arreglar.** En ese caso compón
+  directamente sobre `ui/` y sigue adelante.
+- **Gandalf primero** (cuando está): si existe un componente del sistema de diseño aplicable
+  (`GBadge`, `GTabs`, `GField`…), úsalo. Solo se baja a la primitiva de `ui/` cuando Gandalf todavía
+  no la envuelve, y entonces lo correcto es agregar el wrapper a `gandalf/base/`.
+- **shadcn después:** la primitiva se usa en su forma pura, sin modificarla ni agregarle clases
+  extra salvo necesidad estricta.
+- **Solo `ui/` habla con Reka UI.** Nada más importa `reka-ui` (los `import type` sí valen: un tipo
+  no arrastra la librería al bundle).
+- **`gandalf/` es genérico**, sin excepción: nada de `Factura`, `Cliente` ni ningún tipo del
+  dominio. Eso vive en `features/<slice>/components/`.
+- `app/components/gandalf/` es **intocable** por las mismas razones que `ui/`: es código vendido, lo
+  sincroniza el sistema de diseño, y está fuera de `prettier`/`eslint`. Al agregar un `G*` se hace
+  en el repo de Gandalf, no aquí. Convenciones en
+  [`app/components/gandalf/README.md`](./app/components/gandalf/README.md).
 - `app/components/ui/` (shadcn) es **intocable**: no editar, no extender, no borrar archivos ahí —
   está excluido de `prettier`/`eslint` a propósito. Compón variantes por fuera (wrappers, props,
   composición), nunca modificando la fuente. Para agregar componentes usa el CLI de shadcn-vue.

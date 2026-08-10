@@ -17,9 +17,12 @@ export default defineNuxtConfig({
   // Feature components (`app/features/<slice>/components/`) are deliberately not
   // auto-imported: they belong to one slice, and importing them by path is what
   // keeps that visible at the call site.
+  // Gandalf va primero: si un día un `G*` de kit y uno de base comparten nombre,
+  // gana el más compuesto, que es el que quieres usar.
   components: [
+    { path: '~/components/gandalf/kit', pathPrefix: false },
+    { path: '~/components/gandalf/base', pathPrefix: false },
     { path: '~/components/blocks', pathPrefix: false },
-    { path: '~/components/kit', pathPrefix: false },
     { path: '~/components/layout', pathPrefix: false },
   ],
 

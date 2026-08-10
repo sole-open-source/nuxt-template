@@ -23,7 +23,7 @@ app/
 ├── utils/         # Pure utility functions (date, string) — auto-imported
 ├── composables/   # Stateful composables (useAuth, useQuery, useDisclosure, ...) — auto-imported
 ├── features/      # Vertical slices (auth, ...)
-├── components/    # UI: ui/ (shadcn), kit/, blocks/, layout/
+├── components/    # ui/ (shadcn), gandalf/{base,kit}, blocks/, layout/
 ├── layouts/       # default (sidebar shell), auth (login split screen)
 ├── middleware/    # auth.global.ts — the page guard
 └── pages/         # Routes
