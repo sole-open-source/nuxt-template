@@ -23,6 +23,7 @@
     "@lucide/vue": "^1.31.0",
     "@nuxt/eslint": "1.17.0",
     "@vueuse/core": "^14.4.0",
+    "@vueuse/nuxt": "14.4.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "eslint": "^9.0.0 || ^10.0.0",
