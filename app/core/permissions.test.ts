@@ -13,13 +13,7 @@ import { hasPermission, permissionForRoute } from './permissions'
 describe('hasPermission', () => {
   const matrix: Array<[UserRole, Permission, boolean]> = [
     [UserRole.ADMIN, 'dashboard:read', true],
-    [UserRole.ADMIN, 'users:read', true],
-    [UserRole.ADMIN, 'users:write', true],
-    [UserRole.ADMIN, 'users:delete', true],
     [UserRole.MEMBER, 'dashboard:read', true],
-    [UserRole.MEMBER, 'users:read', false],
-    [UserRole.MEMBER, 'users:write', false],
-    [UserRole.MEMBER, 'users:delete', false],
   ]
 
   it.each(matrix)('%s %s the permission %s', (role, permission, expected) => {
@@ -30,7 +24,6 @@ describe('hasPermission', () => {
     // A role added to the backend arrives with no grants, so a restrictive new
     // role cannot widen access here by falling back to a known one.
     expect(hasPermission(ROLE_PERMISSIONS, 'viewer', 'dashboard:read')).toBe(false)
-    expect(hasPermission(ROLE_PERMISSIONS, 'viewer', 'users:delete')).toBe(false)
   })
 
   it('grants nothing without a role', () => {
@@ -39,14 +32,9 @@ describe('hasPermission', () => {
   })
 })
 
-describe('permissionForRoute', () => {
+describe("permissionForRoute (the app's own table)", () => {
   it('resolves each declared page to its permission', () => {
     expect(permissionForRoute(AUTH_ROUTE_PERMISSIONS, '/')).toBe('dashboard:read')
-    expect(permissionForRoute(AUTH_ROUTE_PERMISSIONS, '/admin')).toBe('users:read')
-  })
-
-  it('applies a declared page to everything nested under it', () => {
-    expect(permissionForRoute(AUTH_ROUTE_PERMISSIONS, '/admin/users')).toBe('users:read')
   })
 
   it('returns null for a page that is not declared', () => {
@@ -55,21 +43,29 @@ describe('permissionForRoute', () => {
   })
 
   it('does not let the root entry act as a prefix for every path', () => {
-    // Every role holds 'dashboard:read'; '/admin' must not inherit it.
-    expect(permissionForRoute(AUTH_ROUTE_PERMISSIONS, '/admin')).not.toBe('dashboard:read')
+    // As a plain string prefix, '/' would swallow every path and undo the
+    // deny-by-default — every role holds 'dashboard:read'.
+    expect(permissionForRoute(AUTH_ROUTE_PERMISSIONS, '/admin')).toBeNull()
+    expect(permissionForRoute(AUTH_ROUTE_PERMISSIONS, '/anything/nested')).toBeNull()
+  })
+})
+
+describe('permissionForRoute (prefix resolution)', () => {
+  // Fixture tables: these pin the matching rules themselves, independent of
+  // whatever pages this particular app happens to declare.
+  const routes = { '/admin': 'users:read', '/admin/danger': 'users:delete' } as const
+
+  it('applies a declared page to everything nested under it', () => {
+    expect(permissionForRoute(routes, '/admin/settings')).toBe('users:read')
   })
 
   it('resolves with the longest matching prefix, not the first one', () => {
-    const routes = { '/admin': 'users:read', '/admin/danger': 'users:delete' } as const
-
     expect(permissionForRoute(routes, '/admin/danger')).toBe('users:delete')
     expect(permissionForRoute(routes, '/admin/danger/nested')).toBe('users:delete')
     expect(permissionForRoute(routes, '/admin/other')).toBe('users:read')
   })
 
   it('does not match a sibling that merely shares a prefix string', () => {
-    const routes = { '/admin': 'users:read' } as const
-
     expect(permissionForRoute(routes, '/admin-panel')).toBeNull()
   })
 })
