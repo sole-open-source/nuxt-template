@@ -17,3 +17,6 @@ example
 
 # shadcn-vue components (formatted by the shadcn-vue CLI itself)
 app/components/ui
+# Agent tooling — written by the tools, not by us
+.claude
+.agents
