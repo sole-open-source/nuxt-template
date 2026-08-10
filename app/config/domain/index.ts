@@ -1,8 +1,0 @@
-export { PERMISSION_GROUPS, ROLE_LABELS } from './permissions'
-export type { PermissionGroup } from './permissions'
-export { PAGE_SIZES, DEFAULT_PAGE_SIZE } from './pagination'
-export type { PageSize } from './pagination'
-export { PUBLIC_ROUTES, AUTH_ROUTE_PERMISSIONS, DEFAULT_ROUTE } from './route-permissions'
-export { NAVIGATION_ITEMS, NAVIGATION_GROUP_LABELS, NavigationGroup } from './navigation'
-export type { NavigationItem } from './navigation'
-export { FEATURE_FLAGS } from './feature-flags'

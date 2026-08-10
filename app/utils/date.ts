@@ -1,31 +1,3 @@
-const DEFAULT_LOCALE = 'es-CO'
-
-export function formatDate(
-  value: string | Date,
-  opts?: { locale?: string; format?: 'short' | 'medium' | 'long' },
-): string {
-  const date = typeof value === 'string' ? new Date(value) : value
-  const locale = opts?.locale ?? DEFAULT_LOCALE
-
-  const formatMap: Record<string, Intl.DateTimeFormatOptions> = {
-    short: { day: '2-digit', month: '2-digit', year: 'numeric' },
-    medium: { day: 'numeric', month: 'short', year: 'numeric' },
-    long: { day: 'numeric', month: 'long', year: 'numeric' },
-  }
-
-  return new Intl.DateTimeFormat(locale, formatMap[opts?.format ?? 'medium']).format(date)
-}
-
-export function isValidDate(value: string): boolean {
-  if (!value) return false
-  return !Number.isNaN(new Date(value).getTime())
-}
-
-export function isExpired(value: string | Date): boolean {
-  const date = typeof value === 'string' ? new Date(value) : value
-  return date.getTime() < Date.now()
-}
-
 export type TimeFilter =
   | 'today'
   | 'yesterday'
@@ -39,35 +11,41 @@ export type TimeFilter =
   | 'all_time'
 
 const TIME_FILTER_LABELS: Record<TimeFilter, string> = {
-  today: 'Hoy',
-  yesterday: 'Ayer',
-  last_7_days: 'Últimos 7 días',
-  last_30_days: 'Últimos 30 días',
-  last_90_days: 'Últimos 90 días',
-  this_month: 'Este mes',
-  last_month: 'Mes anterior',
-  this_year: 'Este año',
-  last_year: 'Año anterior',
-  all_time: 'Todo el tiempo',
+  today: 'Today',
+  yesterday: 'Yesterday',
+  last_7_days: 'Last 7 days',
+  last_30_days: 'Last 30 days',
+  last_90_days: 'Last 90 days',
+  this_month: 'This month',
+  last_month: 'Last month',
+  this_year: 'This year',
+  last_year: 'Last year',
+  all_time: 'All time',
 }
 
 export function timeFilterLabel(filter: TimeFilter): string {
   return TIME_FILTER_LABELS[filter] ?? filter
 }
 
-export function relativeTime(value: string | Date, locale = DEFAULT_LOCALE): string {
-  const date = typeof value === 'string' ? new Date(value) : value
-  const now = new Date()
-  const diffMs = date.getTime() - now.getTime()
-  const diffSecs = Math.round(diffMs / 1000)
-  const diffMins = Math.round(diffSecs / 60)
-  const diffHours = Math.round(diffMins / 60)
-  const diffDays = Math.round(diffHours / 24)
+export function isValidDate(value: string): boolean {
+  if (!value) return false
+  return !Number.isNaN(new Date(value).getTime())
+}
 
+export function formatDate(date: string | Date, locale = 'en'): string {
+  return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(date))
+}
+
+export function relativeTime(date: string | Date, locale = 'en'): string {
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
+  const diff = (new Date(date).getTime() - Date.now()) / 1000
+  const abs = Math.abs(diff)
+  if (abs < 60) return rtf.format(Math.round(diff), 'second')
+  if (abs < 3600) return rtf.format(Math.round(diff / 60), 'minute')
+  if (abs < 86400) return rtf.format(Math.round(diff / 3600), 'hour')
+  return rtf.format(Math.round(diff / 86400), 'day')
+}
 
-  if (Math.abs(diffSecs) < 60) return rtf.format(diffSecs, 'second')
-  if (Math.abs(diffMins) < 60) return rtf.format(diffMins, 'minute')
-  if (Math.abs(diffHours) < 24) return rtf.format(diffHours, 'hour')
-  return rtf.format(diffDays, 'day')
+export function isExpired(date: string | Date): boolean {
+  return new Date(date).getTime() < Date.now()
 }

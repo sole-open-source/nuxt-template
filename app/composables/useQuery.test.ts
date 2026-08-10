@@ -1,0 +1,59 @@
+import { describe, expect, it } from 'vitest'
+import { AppError } from '~/core/errors'
+import { useQuery } from './useQuery'
+
+describe('useQuery', () => {
+  it('starts empty and idle', () => {
+    const query = useQuery<string[]>()
+
+    expect(query.data).toBe(null)
+    expect(query.error).toBe(null)
+    expect(query.isLoading).toBe(false)
+  })
+
+  it('holds the resolved data', async () => {
+    const query = useQuery<string[]>()
+
+    await query.run(async () => ['a', 'b'])
+
+    expect(query.data).toEqual(['a', 'b'])
+    expect(query.error).toBe(null)
+    expect(query.isLoading).toBe(false)
+  })
+
+  it('exposes the normalized error object, not a string', async () => {
+    const query = useQuery<string[]>()
+
+    await query.run(async () => {
+      throw new AppError('NOT_FOUND', 'No existe')
+    })
+
+    expect(query.error).toBeInstanceOf(AppError)
+    expect(query.error?.code).toBe('NOT_FOUND')
+    expect(query.error?.message).toBe('No existe')
+    expect(query.isLoading).toBe(false)
+  })
+
+  it('clears a previous error on the next run', async () => {
+    const query = useQuery<string>()
+    await query.run(async () => {
+      throw new Error('boom')
+    })
+    expect(query.error).not.toBe(null)
+
+    await query.run(async () => 'ok')
+
+    expect(query.error).toBe(null)
+    expect(query.data).toBe('ok')
+  })
+
+  it('is loading while the call is in flight', async () => {
+    const query = useQuery<string>()
+
+    const pending = query.run(async () => 'value')
+    expect(query.isLoading).toBe(true)
+
+    await pending
+    expect(query.isLoading).toBe(false)
+  })
+})

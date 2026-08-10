@@ -1,9 +1,9 @@
 {
-  "semi": false,
   "$schema": "https://json.schemastore.org/prettierrc",
+  "printWidth": 100,
   "singleQuote": true,
   "trailingComma": "all",
-  "printWidth": 100,
+  "semi": false,
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindStylesheet": "./app/assets/css/tailwind.css",
   "tailwindFunctions": ["cn", "clsx", "cva", "tv"]

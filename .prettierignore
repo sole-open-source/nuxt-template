@@ -4,6 +4,10 @@ node_modules
 .output
 dist
 
+# Unrelated reference projects
+template
+example
+
 # Tooling caches
 .prettier-cache
 
@@ -11,4 +15,8 @@ dist
 *.min.js
 *.min.css
 
+# shadcn-vue components (formatted by the shadcn-vue CLI itself)
 app/components/ui
+# Agent tooling — written by the tools, not by us
+.claude
+.agents
