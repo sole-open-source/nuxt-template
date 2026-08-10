@@ -1,21 +1,13 @@
 import type { User } from '~/types/user'
 
-/** Token pair as the auth API returns it. */
-export interface AuthTokensResponse {
-  access_token: string
-  refresh_token: string
-  expires_at: number
-}
-
+/**
+ * What the login form collects. The browser sends this to *this app*, never to
+ * the auth API — `server/utils/auth-api.ts` is what translates it to whatever
+ * the backend expects.
+ */
 export interface SignInRequest {
   email: string
   password: string
-}
-
-/** What the external auth API answers to a sign-in. Server-side only. */
-export interface SignInResponse {
-  user: User
-  tokens: AuthTokensResponse
 }
 
 /**

@@ -52,8 +52,12 @@ de inventar uno nuevo.
   vive en `features/<slice>/services/` — ver `features/auth/services/auth.ts` como referencia.
   Instáncialos dentro de `setup()` o de un composable, nunca a nivel de módulo.
 - El servidor tiene su propia mitad: `server/utils/auth-api.ts` es el único que habla con la API de
-  auth. Son dos APIs distintas (el navegador llama a este app, este app llama al backend), no una
-  duplicación.
+  auth **y el único que conoce su forma**. Ahí viven las rutas, los tipos `External*` que viaja el
+  cable y los mappers `toUser`/`toSession` que traducen a los tipos internos. Nada fuera de ese
+  archivo ve un `access_token` ni un campo crudo del backend — apuntar el template a otra API es
+  editar ese archivo y nada más. Nunca tipes una respuesta externa directamente como un tipo interno
+  (`$fetch<User>(...)`): eso no valida, solo afirma, y un backend con otra forma compila igual y
+  falla en runtime.
 - **Composición sobre herencia** en componentes y composables: piezas pequeñas y componibles. La
   excepción deliberada es la jerarquía de services (`extends BaseService`), que existe para
   compartir la resolución de token/cliente API entre todos los services.

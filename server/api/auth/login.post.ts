@@ -18,14 +18,11 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const { user, tokens } = await signIn(event, parsed.data)
+    const { user, session } = await signIn(event, parsed.data)
 
-    setAuthSession(event, {
-      accessToken: tokens.access_token,
-      refreshToken: tokens.refresh_token,
-    })
+    setAuthSession(event, session)
 
-    return { user, accessToken: tokens.access_token }
+    return { user, accessToken: session.accessToken }
   } catch (err) {
     logger.error('auth', err)
     // Deliberately vague: telling them which half was wrong enumerates accounts.

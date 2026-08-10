@@ -101,17 +101,43 @@ NUXT_PUBLIC_AUTH_GOOGLE_ENABLED=true
 NUXT_PUBLIC_GOOGLE_CLIENT_ID=your-client-id
 ```
 
-The auth API is expected to answer:
+## The auth API contract
+
+`server/utils/auth-api.ts` is the only file in the app that knows what the auth
+backend looks like: its paths, the types the wire carries (`External*`), and the
+two functions that translate them into the app's own `User` and `Session`.
+Nothing outside it ever sees an `access_token` or a raw backend field.
+
+Out of the box it expects:
 
 | Endpoint                  | Request                   | Response           |
 | ------------------------- | ------------------------- | ------------------ |
 | `POST /auth/login`        | `{ email, password }`     | `{ user, tokens }` |
 | `POST /auth/google/login` | `{ code }`                | `{ user, tokens }` |
-| `GET /auth/me`            | `Authorization: Bearer …` | `User`             |
+| `GET /auth/me`            | `Authorization: Bearer …` | `ExternalUser`     |
 
-`tokens` is `{ access_token, refresh_token, expires_at }`. Change the shape in
-`app/features/auth/types.ts` and `server/utils/auth-api.ts` if yours differs —
-those two files are the only place that knows it.
+where `tokens` is `{ access_token, refresh_token, expires_at? }` and
+`ExternalUser` is `{ id, email, name?, role, avatar?, created_at, updated_at }`.
+
+### Pointing it at a different backend
+
+Edit that one file: the `AUTH_ENDPOINTS` constants, the `External*` interfaces,
+and the `toUser` / `toSession` mappers. The type checker tells you when you are
+done, and `server/utils/auth-api.test.ts` pins the behaviour that matters. For a
+dj-rest-auth backend, for instance, `ExternalUser` becomes
+`{ pk, username, email?, first_name?, last_name?, groups? }`, `toUser` joins the
+name and picks the role out of `groups`, and `toSession` reads `access` /
+`refresh` instead.
+
+Two rules the mappers must keep, both covered by the test suite:
+
+- **Never coerce an unrecognised role to a default.** It has to reach the app
+  verbatim so `ROLE_PERMISSIONS` finds nothing for it and denies. Defaulting it
+  silently grants whatever the default holds.
+- **Never widen the `External*` types to the app's own.** `$fetch<User>(…)`
+  _asserts_ the response is a `User` without checking: a backend answering
+  `{ pk, groups }` would compile, leave `role` undefined at runtime, and 403
+  every request with nothing pointing at the cause.
 
 ## Customization checklist
 

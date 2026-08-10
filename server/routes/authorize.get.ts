@@ -27,11 +27,8 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const { tokens } = await signInWithGoogle(event, code)
-    setAuthSession(event, {
-      accessToken: tokens.access_token,
-      refreshToken: tokens.refresh_token,
-    })
+    const { session } = await signInWithGoogle(event, code)
+    setAuthSession(event, session)
   } catch (err) {
     logger.error('auth', err)
     clearAuthSession(event)
