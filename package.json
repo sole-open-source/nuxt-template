@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "app",
   "type": "module",
   "private": true,
   "scripts": {
@@ -7,11 +7,29 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --cache --write",
+    "format:check": "prettier . --cache --check"
+  },
+  "lint-staged": {
+    "*.{ts,vue,js,mjs,cjs,json,css,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
+    "@nuxt/eslint": "1.17.0",
+    "eslint": "^9.0.0 || ^10.0.0",
     "nuxt": "^4.5.2",
     "vue": "^3.5.41",
     "vue-router": "^5.2.0"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0",
+    "prettier": "^3.9.6"
   }
 }
