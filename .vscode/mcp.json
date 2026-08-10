@@ -1,0 +1,7 @@
+{
+  "servers": {
+    "nuxt": {
+      "url": "https://nuxt.com/mcp"
+    }
+  }
+}

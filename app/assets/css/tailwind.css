@@ -5,6 +5,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * `forms` styles raw form elements in the base layer, so every shadcn component
+ * still wins — its classes are utilities. It is here for the `<input>` you write
+ * yourself. `typography` adds `prose`, for content you don't control the markup
+ * of. Neither changes anything until you use it.
+ */
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
 @theme inline {
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
