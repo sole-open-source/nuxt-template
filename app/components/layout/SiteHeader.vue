@@ -3,8 +3,8 @@ import { APP_BRANDING } from '~/config/app'
 import { NAVIGATION_ITEMS } from '~/config/navigation'
 import { isPrefixOf } from '~/core/permissions'
 
-// Page title from NAVIGATION_ITEMS. Longest route first, so /admin/users
-// resolves to "Admin" rather than to a shallower entry.
+// Page title from NAVIGATION_ITEMS. Longest route first, so a nested route
+// resolves to its own entry rather than to a shallower one.
 const byDepth = [...NAVIGATION_ITEMS].sort((a, b) => b.to.length - a.to.length)
 
 const route = useRoute()

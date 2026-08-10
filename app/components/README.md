@@ -20,7 +20,7 @@ Estos cuatro se auto-importan: se usan sin importar nada.
 ## Componentes de feature
 
 Un componente que nombra una entidad del negocio no va aquí, va en su slice
-(`app/features/users/components/UserFormDialog.vue`) y se importa por ruta. Es el
+(`app/features/auth/components/LoginForm.vue`) y se importa por ruta. Es el
 único caso sin auto-import, y a propósito: el import deja visible que la pieza
 pertenece a un slice y no es genérica.
 

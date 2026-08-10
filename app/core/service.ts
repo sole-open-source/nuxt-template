@@ -19,7 +19,7 @@
  *
  * @example
  * const auth = useAuth()
- * const users = new UsersService(() => auth.accessToken.value)
+ * const reports = new ReportsService(() => auth.accessToken.value)
  */
 import type { ApiClient } from '~/core/api'
 import { createApiClient } from '~/core/api'

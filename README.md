@@ -22,15 +22,15 @@ app/
 ├── types/         # Types shared by more than one slice
 ├── utils/         # Pure utility functions (date, string) — auto-imported
 ├── composables/   # Stateful composables (useAuth, useQuery, useDisclosure, ...) — auto-imported
-├── features/      # Vertical slices (auth, users, ...)
+├── features/      # Vertical slices (auth, ...)
 ├── components/    # UI: ui/ (shadcn), kit/, blocks/, layout/
 ├── layouts/       # default (sidebar shell), auth (login split screen)
 ├── middleware/    # auth.global.ts — the page guard
 └── pages/         # Routes
 server/
 ├── middleware/    # auth.ts — session resolution + endpoint guard installation
-├── utils/         # session, guard, auth-api, users-store (demo)
-├── api/           # JSON endpoints
+├── utils/         # session, guard, auth-api
+├── api/           # JSON endpoints (auth only — add yours here)
 └── routes/        # Browser-navigable routes (OAuth start + callback)
 ```
 
@@ -85,7 +85,8 @@ hosted auth backend out of CORS.
 4. `app/middleware/auth.global.ts` checks the page against `AUTH_ROUTE_PERMISSIONS`.
    It runs on the server _and_ on every client-side navigation, which is why the
    page decision lives there rather than in the server middleware.
-5. Each endpoint calls `event.context.requirePermission('users:delete')` for itself.
+5. Each endpoint you add calls `event.context.requirePermission('…')` for itself —
+   `server/api/endpoints.guard.test.ts` fails if one forgets.
 
 Both auth methods are feature-flagged. Set one or both:
 
@@ -119,7 +120,6 @@ those two files are the only place that knows it.
 - [ ] Add your permission keys, roles and route matrix in `app/config/permissions.ts`
 - [ ] Set `NUXT_PUBLIC_API_BASE_URL` in `.env`
 - [ ] Add feature slices under `app/features/`, with their types in `<slice>/types.ts`
-- [ ] Delete the users demo: `server/utils/users-store.ts` and `server/api/users/`
 
 ## Scripts
 

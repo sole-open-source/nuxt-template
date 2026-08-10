@@ -49,7 +49,7 @@ de inventar uno nuevo.
 
 - **Services** son los únicos responsables de llamadas a la API desde el cliente. Nada de `$fetch`
   directo en componentes o composables. Un service extiende `BaseService` (`~/core/service.ts`) y
-  vive en `features/<slice>/services/` — ver `features/users/services/users.ts` como referencia.
+  vive en `features/<slice>/services/` — ver `features/auth/services/auth.ts` como referencia.
   Instáncialos dentro de `setup()` o de un composable, nunca a nivel de módulo.
 - El servidor tiene su propia mitad: `server/utils/auth-api.ts` es el único que habla con la API de
   auth. Son dos APIs distintas (el navegador llama a este app, este app llama al backend), no una

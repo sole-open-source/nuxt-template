@@ -20,8 +20,10 @@ const visibleItems = computed(() =>
   authEnabled ? NAVIGATION_ITEMS.filter((item) => can(item.requiredPermission)) : NAVIGATION_ITEMS,
 )
 
+// Derived from the enum, so a new group needs no change here — only its entry in
+// NavigationGroup and its label. Groups with nothing visible are dropped.
 const navGroups = computed<NavGroup[]>(() =>
-  [NavigationGroup.Main, NavigationGroup.Admin]
+  Object.values(NavigationGroup)
     .map((group) => ({
       label: NAVIGATION_GROUP_LABELS[group],
       items: visibleItems.value
